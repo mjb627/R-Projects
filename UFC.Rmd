@@ -1,0 +1,45 @@
+---
+title: "UFC"
+author: "Michael Bardfield"
+date: "February 25, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+ufc <- read.csv('ufc-master.csv', na.strings = c('','NA'))
+head(ufc)
+
+dim(ufc)
+names(ufc)
+
+
+```
+
+Do most heavyweight fights end with a finish?
+```{r}
+heavyweight <- ufc %>% filter(weight_class == 'Heavyweight') %>% select(1:2, finish, finish_details, finish_round, finish_round_time, date)
+str(heavyweight)
+tail(heavyweight)
+
+table(ufc$finish)
+
+heavyweight %>% ggplot(aes(x=finish_round)) + stat_bin()
+
+ufc$finish[ufc$finish == 'U-DEC'] <- 'DEC'
+ufc$finish[ufc$finish == 'M-DEC'] <- 'DEC'
+ufc$finish[ufc$finish == 'S-DEC'] <- 'DEC'
+
+
+ufc %>% select(1:2, finish, finish_details, finish_round, finish_round_time, date, weight_class) %>% filter(weight_class != 'Catch Weight') %>%  filter(finish != 'DQ' & finish != 'Overturned') %>% ggplot(aes(x=finish)) + geom_bar(stat = 'count') + facet_wrap(~weight_class) + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+
