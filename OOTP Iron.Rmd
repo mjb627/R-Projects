@@ -1,0 +1,59 @@
+---
+title: "OOTP Iron"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(readxl)
+library(dplyr)
+```
+
+```{r}
+ootp <- read_excel('OOTP Iron Spetember 2021.xlsx')
+head(ootp)
+dim(ootp)
+```
+
+```{r}
+sp <- ootp %>% filter(POS == 'SP')
+dim(sp)
+head(sp)
+```
+
+```{r}
+shapiro.test(sp$MOV)
+shapiro.test(sp$CON)
+```
+
+```{r}
+mean(sp$STU) #58
+mean(sp$MOV) #42
+mean(sp$CON) #50
+```
+
+```{r}
+rp <- ootp %>% filter(POS == 'RP' | POS == 'CL')
+dim(rp)
+head(rp)
+```
+
+```{r}
+shapiro.test(rp$STU)
+```
+
+```{r}
+mean(rp$STU) #68
+mean(rp$MOV) #48
+mean(rp$CON) #50
+```
+
+
+
+
+
+
+
